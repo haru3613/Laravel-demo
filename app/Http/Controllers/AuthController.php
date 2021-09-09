@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\AuthService;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -12,27 +13,28 @@ class AuthController extends Controller
     public function __construct(AuthService $service)
     {
         $this->service = $service;
-        $this->middleware('auth:api')->except('login');
     }
 
     public function login(Request $request)
     {
         $account = $request->input('account');
         $password = $request->input('password');
-        $result = $this->service->login($account, $password);
-        $credentials = request(['email', 'password']);
-
-        if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['status' => 1, 'message' => 'invalid credentials'], 401);
+        $token = $this->service->login($account, $password);
+        if ($token !== false) {
+            $result = [
+                'token_type' => 'Bearer',
+                'access_token' => $token,
+                'expires_in' => JWTAuth::factory()->getTTL() * 60
+            ];
         }
 
-        return response()->json(['status' => 0, 'token' => $token]);
+        return response()->json($result);
     }
 
     public function register(Request $request)
     {
-        dd($request->all());
         $result = $this->service->register($request->all());
+        return response()->json($result);
     }
 
     public function logout()

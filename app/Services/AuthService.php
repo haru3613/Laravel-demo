@@ -25,7 +25,7 @@ class AuthService
             dd($user);
         }
 
-        dd($user);
+        return auth('api')->fromUser($user);
     }
 
     public function register(array $data)
@@ -36,7 +36,6 @@ class AuthService
             // TODO DataEmpty
             dd($user);
         }
-
-        dd($user);
+        return $user;
     }
 }

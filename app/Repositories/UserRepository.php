@@ -30,10 +30,25 @@ class UserRepository
      * @param string $username 帳號
      * @return mixed
      */
+    public function getUserPaginate(int $limit)
+    {
+        try {
+            return User::paginate($limit);
+        } catch (Exception $e) {
+            dd();
+        }
+    }
+
+    /**
+     * 搜尋使用者
+     *
+     * @param string $username 帳號
+     * @return mixed
+     */
     public function registerAccount(array $data)
     {
         try {
-            return User::
+            return User::create($data);
         } catch (Exception $e) {
             dd();
         }

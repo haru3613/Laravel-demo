@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\UserRepository;
+use Illuminate\Support\Arr;
 
 class AuthService
 {
@@ -30,7 +31,11 @@ class AuthService
 
     public function register(array $data)
     {
-        $user = $this->user_repository->registerAccount($data);
+        $name = Arr::get($data, 'name');
+        $account = Arr::get($data, 'account');
+        $password = Arr::get($data, 'password');
+        $phone_number = Arr::get($data, 'phone_number');
+        $user = $this->user_repository->registerAccount($name, $account, $password, $phone_number);
 
         if ($user === null) {
             // TODO DataEmpty

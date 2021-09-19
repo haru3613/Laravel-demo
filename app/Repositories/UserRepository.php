@@ -4,13 +4,15 @@ namespace App\Repositories;
 
 use Exception;
 use App\Models\User;
+use App\Models\Phone;
+use Illuminate\Support\Facades\DB;
 
 class UserRepository
 {
     /**
-     * 搜尋使用者
+     * 透過帳號搜尋特定使用者
      *
-     * @param string $username 帳號
+     * @param string $account 帳號
      * @return mixed
      */
     public function searchUserByAccount(string $account)
@@ -25,9 +27,9 @@ class UserRepository
     }
 
     /**
-     * 搜尋使用者
+     * 取得使用者
      *
-     * @param string $username 帳號
+     * @param int $limit 帳號
      * @return mixed
      */
     public function getUserPaginate(int $limit)
@@ -40,17 +42,31 @@ class UserRepository
     }
 
     /**
-     * 搜尋使用者
+     * 建立使用者
      *
-     * @param string $username 帳號
+     * @param array $data 帳號
      * @return mixed
      */
-    public function registerAccount(array $data)
+    public function registerAccount(string $name, string $account, string $password, string $phone_number)
     {
+        DB::beginTransaction();
         try {
-            return User::create($data);
+            $phones = new Phone();
+            $phones->phone_number = $phone_number;
+            $phones->save();
+
+            $users = new User();
+            $users->name = $name;
+            $users->account = $account;
+            $users->password = $password;
+            $users->phone_id = $phones->id;
+            $users->save();
+
+            DB::commit();
+            return $users;
         } catch (Exception $e) {
-            dd();
+            DB::rollBack();
+            dd($e);
         }
     }
 }

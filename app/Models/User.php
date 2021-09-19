@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Models\Phone;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -11,6 +12,17 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'account',
         'password',
+    ];
+
+    /**
+     * 將資料作轉換
+     *
+     * @var array
+     */
+    protected $casts = [
+        'enabled' => 'boolean',
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s'
     ];
 
     /**
@@ -31,5 +43,13 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    /**
+     * 取得使用者的手機號碼
+     */
+    public function phone()
+    {
+        return $this->hasMany(Phone::class, 'phone_id');
     }
 }

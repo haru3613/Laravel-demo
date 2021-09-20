@@ -3,10 +3,11 @@
 namespace App\Services;
 
 use App\Repositories\UserRepository;
-use Illuminate\Support\Arr;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthService
 {
+
     /**
      * @var UserRepository
      */
@@ -26,16 +27,12 @@ class AuthService
             dd($user);
         }
 
-        return auth('api')->fromUser($user);
+        return JWTAuth::fromUser($user);
     }
 
     public function register(array $data)
     {
-        $name = Arr::get($data, 'name');
-        $account = Arr::get($data, 'account');
-        $password = Arr::get($data, 'password');
-        $phone_number = Arr::get($data, 'phone_number');
-        $user = $this->user_repository->registerAccount($name, $account, $password, $phone_number);
+        $user = $this->user_repository->registerAccount($data);
 
         if ($user === null) {
             // TODO DataEmpty

@@ -12,6 +12,7 @@ class AuthController extends Controller
 
     public function __construct(AuthService $service)
     {
+        $this->middleware('auth:api', ['except' => ['login']]);
         $this->service = $service;
     }
 
@@ -20,11 +21,12 @@ class AuthController extends Controller
         $account = $request->input('account');
         $password = $request->input('password');
         $token = $this->service->login($account, $password);
+
         if ($token !== false) {
             $result = [
                 'token_type' => 'Bearer',
                 'access_token' => $token,
-                'expires_in' => JWTAuth::factory()->getTTL() * 60
+                'expires_in' => auth('api')->factory()->getTTL() * 60
             ];
         }
 

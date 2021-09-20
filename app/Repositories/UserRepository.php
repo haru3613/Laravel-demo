@@ -4,8 +4,6 @@ namespace App\Repositories;
 
 use Exception;
 use App\Models\User;
-use App\Models\Phone;
-use Illuminate\Support\Facades\DB;
 
 class UserRepository
 {
@@ -22,7 +20,7 @@ class UserRepository
                 ->where('account', $account)
                 ->first();
         } catch (Exception $e) {
-            dd();
+            dd($e);
         }
     }
 
@@ -37,35 +35,21 @@ class UserRepository
         try {
             return User::paginate($limit);
         } catch (Exception $e) {
-            dd();
+            dd($e);
         }
     }
 
     /**
      * 建立使用者
      *
-     * @param array $data 帳號
+     * @param array $data
      * @return mixed
      */
-    public function registerAccount(string $name, string $account, string $password, string $phone_number)
+    public function registerAccount(array $data)
     {
-        DB::beginTransaction();
         try {
-            $phones = new Phone();
-            $phones->phone_number = $phone_number;
-            $phones->save();
-
-            $users = new User();
-            $users->name = $name;
-            $users->account = $account;
-            $users->password = $password;
-            $users->phone_id = $phones->id;
-            $users->save();
-
-            DB::commit();
-            return $users;
+            return User::create($data);
         } catch (Exception $e) {
-            DB::rollBack();
             dd($e);
         }
     }

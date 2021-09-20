@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use App\Models\Phone;
+use App\Models\Post;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -46,10 +46,10 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * 取得使用者的手機號碼
+     * 取得使用者的文章
      */
-    public function phone()
+    public function posts()
     {
-        return $this->hasMany(Phone::class, 'phone_id');
+        return $this->morphMany(Post::class, 'user');
     }
 }

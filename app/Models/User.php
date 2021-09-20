@@ -50,6 +50,6 @@ class User extends Authenticatable implements JWTSubject
      */
     public function posts()
     {
-        return $this->morphMany(Post::class, 'user');
+        return $this->hasMany(Post::class);
     }
 }

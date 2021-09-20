@@ -12,10 +12,15 @@ class AuthController extends Controller
 
     public function __construct(AuthService $service)
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('jwt.auth', ['except' => ['login', 'register']]);
         $this->service = $service;
     }
 
+    /**
+     * 登入取得Token
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function login(Request $request)
     {
         $account = $request->input('account');
@@ -33,6 +38,11 @@ class AuthController extends Controller
         return response()->json($result);
     }
 
+    /**
+     * 註冊使用者
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function register(Request $request)
     {
         $result = $this->service->register($request->all());

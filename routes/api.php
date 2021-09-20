@@ -22,11 +22,12 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('register', [AuthController::class, 'register']);
 });
 
-Route::middleware(['auth:api'])->group(function () {
+Route::middleware(['jwt.auth'])->group(function () {
     Route::group(['prefix' => 'user'], function () {
         Route::get('/', [UserController::class, 'index']);
     });
     Route::group(['prefix' => 'post'], function () {
         Route::post('/', [PostController::class, 'create']);
+        Route::get('/', [PostController::class, 'index']);
     });
 });

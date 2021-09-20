@@ -18,6 +18,11 @@ class PostService
         $this->post_repository = $post_repository;
     }
 
+    /**
+     * 建立文章
+     * @param array $data
+     * @return mixed
+     */
     public function create(array $data)
     {
         $title = Arr::get($data, 'title');
@@ -28,6 +33,12 @@ class PostService
             // TODO DataEmpty
             dd($post);
         }
+
         return $post;
+    }
+
+    public function getPostPaginate(int $limit)
+    {
+        return $this->post_repository->getPostPaginate($limit);
     }
 }

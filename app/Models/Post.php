@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
@@ -14,10 +13,12 @@ class Post extends Model
     ];
 
     /**
-     * Get the user model
+     * 將資料作轉換
+     *
+     * @var array
      */
-    public function user()
-    {
-        return $this->morphTo();
-    }
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s'
+    ];
 }

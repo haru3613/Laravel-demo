@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use Exception;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserRepository
 {
@@ -16,7 +17,7 @@ class UserRepository
     public function searchUserByAccount(string $account)
     {
         try {
-            return User::select(['name', 'account', 'password'])
+            return User::select(['*'])
                 ->where('account', $account)
                 ->first();
         } catch (Exception $e) {
@@ -45,10 +46,14 @@ class UserRepository
      * @param array $data
      * @return mixed
      */
-    public function registerAccount(array $data)
+    public function registerAccount(string $name, string $account, string $password)
     {
         try {
-            return User::create($data);
+            return User::create([
+                'name' => $name,
+                'account' => $account,
+                'password' => Hash::make($password),
+            ]);
         } catch (Exception $e) {
             dd($e);
         }

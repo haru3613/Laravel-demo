@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\PostService;
+use App\Http\Requests\CreatePostRequest;
 use Illuminate\Http\JsonResponse;
 
 class PostController extends Controller
@@ -17,10 +18,10 @@ class PostController extends Controller
 
     /**
      * 建立文章
-     * @param Request $request
+     * @param CreatePostRequest $request
      * @return JsonResponse
      */
-    public function create(Request $request): JsonResponse
+    public function create(CreatePostRequest $request): JsonResponse
     {
         $result = $this->service->create($request->all());
         return response()->json($result);

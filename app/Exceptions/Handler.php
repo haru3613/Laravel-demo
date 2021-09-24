@@ -4,6 +4,10 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Exception;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -34,8 +38,35 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function(Exception $e, $request) {
+            return $this->handleException($request, $e);
         });
+    }
+
+    /**
+     * Handle response from exception.
+     * 
+     * @param Request $request
+     * @param \Exception $exception
+     * @return JsonResponse|null
+     */
+    private function handleException($request, Exception $exception)
+    {
+        switch (true) {
+            case $exception instanceof NotFoundHttpException:
+                return response()->json([
+                    'message' => 'Http not found.'
+                ], 404);
+            case $exception instanceof MethodNotAllowedHttpException:
+                return response()->json([
+                    'message' => 'Method not allowed.'
+                ], 405);
+            case $exception instanceof UnauthorizedHttpException:
+                return response()->json([
+                    'message' => 'Unauthorized.'
+                ], 401);
+        }
+
+        return null;
     }
 }

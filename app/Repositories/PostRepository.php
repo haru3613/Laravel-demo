@@ -44,12 +44,13 @@ class PostRepository
     {
 
         try {
-            // $user = Auth::guard('api')->user();
-            // $result = User::find($user->id);
-            // dd($result->posts);
             $user = Auth::guard('api')->user();
+            $result = User::find($user->id);
+            return $result->posts;
+            // // return $result->posts;
+            // $user = Auth::guard('api')->user();
 
-            return Post::where('user_id', $user->id)->paginate($limit);
+            // return Post::where('user_id', $user->id)->paginate($limit);
         } catch (Exception $e) {
             dd($e);
         }

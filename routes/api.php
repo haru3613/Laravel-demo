@@ -18,16 +18,16 @@ use App\Http\Controllers\PostController;
 */
 
 Route::group(['prefix' => 'auth'], function () {
-    Route::post('login', [AuthController::class, 'login']);
-    Route::post('register', [AuthController::class, 'register']);
+    Route::post('login', [AuthController::class, 'login'])->name('auth.login');
+    Route::post('register', [AuthController::class, 'register'])->name('auth.register');
 });
 
 Route::middleware(['jwt.auth'])->group(function () {
     Route::group(['prefix' => 'user'], function () {
-        Route::get('/', [UserController::class, 'index']);
+        Route::get('/', [UserController::class, 'index'])->name('user.index');
     });
     Route::group(['prefix' => 'post'], function () {
-        Route::post('/', [PostController::class, 'create']);
-        Route::get('/', [PostController::class, 'index']);
+        Route::post('/', [PostController::class, 'create'])->name('post.create');
+        Route::get('/', [PostController::class, 'index'])->name('post.index');
     });
 });

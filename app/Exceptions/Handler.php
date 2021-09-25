@@ -3,7 +3,6 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable;
 use Exception;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -45,7 +44,7 @@ class Handler extends ExceptionHandler
 
     /**
      * Handle response from exception.
-     * 
+     *
      * @param Request $request
      * @param \Exception $exception
      * @return JsonResponse|null
